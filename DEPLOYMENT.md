@@ -69,7 +69,7 @@ Your database is already created and migrated, so there is nothing to do. Two th
 | Name | `discord-automation-api` (gives you `discord-automation-api.onrender.com`) |
 | Root Directory | **`server`** |
 | Runtime | Node |
-| Build Command | `npm install && npx prisma generate && npm run build` |
+| Build Command | `npm install --include=dev && npx prisma generate && npm run build` |
 | Start Command | `npm start` |
 | Health Check Path | `/health` |
 | Instance Type | See warning below |
@@ -77,6 +77,15 @@ Your database is already created and migrated, so there is nothing to do. Two th
 > **Root Directory must be `server`.** The repo root is an npm workspace monorepo
 > (`workspaces: ["server", "client"]`); building from the root produces a layout Render
 > cannot start.
+
+> **Why `--include=dev`.** Render sets `NODE_ENV=production` as an environment variable,
+> and npm treats that as "omit devDependencies". This repo keeps its build toolchain
+> (`typescript`, `@types/node`, `@types/express`) in devDependencies, so a plain
+> `npm install` yields a build that fails with `TS2580: Cannot find name 'process'` and
+> `TS7016: Could not find a declaration file for module 'express'`. The root `.npmrc` also
+> sets `include=dev` so the build survives even if the Build Command is left as
+> `npm install`. It must stay at the repo root — npm ignores `.npmrc` files inside
+> workspace directories.
 
 3. **Environment Variables** — click *Add* for each:
 
