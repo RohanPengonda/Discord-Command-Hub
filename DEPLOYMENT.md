@@ -162,11 +162,17 @@ the boot with an explicit list of missing or placeholder credentials — that is
 
 | Key | Value |
 | --- | --- |
-| `VITE_API_URL` | `https://discord-automation-api.onrender.com/api` |
+| `BACKEND_API_URL` | `https://discord-automation-api.onrender.com/api` |
 
 Note the trailing `/api`. The client calls `api.get('/commands')`, so the base URL must
 include `/api`. Without this variable the client falls back to the relative path `/api`,
 which resolves against the Vercel domain and 404s.
+
+> **`BACKEND_API_URL` requires `envPrefix` in `client/vite.config.ts`.** Vite only exposes
+> env vars to the browser bundle when their name matches `envPrefix`, which defaults to
+> `VITE_`. That is why the project sets `envPrefix: ['VITE_', 'BACKEND_']`. Adding a
+> `BACKEND_*` var without that entry fails silently — the client just sees `undefined` and
+> reverts to `/api`. `VITE_API_URL` is still accepted as a fallback for older deploys.
 
 4. Click **Deploy**. Note the URL, e.g. `https://discord-automation-dashboard.vercel.app`.
 
