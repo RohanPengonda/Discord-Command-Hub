@@ -1,0 +1,149 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum CommandStatus {
+  RECEIVED
+  PROCESSING
+  DEFERRED
+  SUCCESS
+  FAILED
+}
+
+enum PriorityLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  role         Role     @default(ADMIN)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_users")
+}
+
+model DiscordServer {
+  id                 String                @id // Discord Guild ID
+  name               String
+  icon               String?
+  ownerId            String?
+  joinedAt           DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  channels           DiscordChannel[]
+  commandConfigs     CommandConfiguration[]
+  commandLogs        CommandLog[]
+
+  @@map("discord_servers")
+}
+
+model DiscordChannel {
+  id        String        @id // Discord Channel ID
+  serverId  String
+  server    DiscordServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  name      String
+  type      String        // e.g. GUILD_TEXT
+  isPrimary Boolean       @default(false)
+  isMirror  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("discord_channels")
+}
+
+model CommandConfiguration {
+  id                   String        @id @default(uuid())
+  serverId             String
+  server               DiscordServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  commandName          String        // 'report', 'status'
+  enabled              Boolean       @default(true)
+  saveLogs             Boolean       @default(true)
+  replyInDiscord       Boolean       @default(true)
+  mirrorNotification   Boolean       @default(true)
+  aiProcessing         Boolean       @default(true)
+  primaryChannelId     String?
+  mirrorChannelId      String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  @@unique([serverId, commandName])
+  @@map("command_configurations")
+}
+
+model ProcessedInteraction {
+  id            String   @id // Discord Interaction ID
+  type          Int      // 1: PING, 2: COMMAND, 3: COMPONENT, 5: MODAL
+  commandName   String?
+  userId        String
+  username      String
+  serverId      String?
+  channelId     String?
+  token         String   // Interaction token for deferral webhooks
+  processedAt   DateTime @default(now())
+  commandLog    CommandLog?
+
+  @@map("processed_interactions")
+}
+
+model CommandLog {
+  id              String               @id @default(uuid())
+  interactionId   String               @unique
+  interaction     ProcessedInteraction @relation(fields: [interactionId], references: [id], onDelete: Cascade)
+  serverId        String?
+  server          DiscordServer?       @relation(fields: [serverId], references: [id], onDelete: SetNull)
+  commandName     String
+  userId          String
+  username        String
+  rawOptions      Json?
+  status          CommandStatus        @default(RECEIVED)
+  errorMessage    String?
+  aiResult        AIResult?
+  notificationLog NotificationLog?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  @@map("command_logs")
+}
+
+model AIResult {
+  id           String        @id @default(uuid())
+  commandLogId String        @unique
+  commandLog   CommandLog    @relation(fields: [commandLogId], references: [id], onDelete: Cascade)
+  summary      String
+  category     String
+  priority     PriorityLevel @default(MEDIUM)
+  rawAiOutput  Json?
+  createdAt    DateTime      @default(now())
+
+  @@map("ai_results")
+}
+
+model NotificationLog {
+  id           String     @id @default(uuid())
+  commandLogId String     @unique
+  commandLog   CommandLog @relation(fields: [commandLogId], references: [id], onDelete: Cascade)
+  channelId    String
+  channelType  String     // DISCORD_CHANNEL | SLACK_WEBHOOK
+  status       String     // SUCCESS | FAILED
+  errorMessage String?
+  payload      Json?
+  sentAt       DateTime   @default(now())
+
+  @@map("notification_logs")
+}
