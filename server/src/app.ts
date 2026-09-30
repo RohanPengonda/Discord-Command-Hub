@@ -47,7 +47,14 @@ app.use(
     origin: (origin, callback) => {
       // No Origin header = non-browser client (curl, Discord, uptime checks).
       if (!origin) return callback(null, true);
-      return callback(null, isAllowedOrigin(origin));
+      if (isAllowedOrigin(origin)) return callback(null, true);
+      // Returning false omits the CORS headers, so the browser blocks the response
+      // and the client only sees "Network Error" with no clue why. Log it loudly.
+      logger.warn(`Blocked CORS request from disallowed origin: ${origin}`, {
+        allowed: [...ALLOWED_ORIGINS, ...LOCAL_ORIGINS],
+        allowVercelPreviews: ALLOW_VERCEL_PREVIEWS,
+      });
+      return callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],

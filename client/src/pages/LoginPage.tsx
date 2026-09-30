@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
+import { extractApiError } from '../api/axios_client.js';
 import { ShieldAlert, Lock, Mail } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -20,7 +21,7 @@ export const LoginPage: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to authenticate. Please check your credentials.');
+      setError(extractApiError(err, 'Failed to authenticate. Please check your credentials.'));
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../api/axios_client.js';
+import { api, extractApiError } from '../api/axios_client.js';
 import { Check, Hash, Server, Zap } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
@@ -46,7 +46,7 @@ export const SettingsPage: React.FC = () => {
       setMessage('Server & Channel settings updated successfully!');
       setTimeout(() => setMessage(''), 4000);
     } catch (err: any) {
-      setMessage(`Error: ${err.response?.data?.error || 'Failed to update settings'}`);
+      setMessage(`Error: ${extractApiError(err, 'Failed to update settings')}`);
     } finally {
       setSaving(false);
     }
@@ -60,7 +60,7 @@ export const SettingsPage: React.FC = () => {
       setMessage('Successfully registered /report and /status slash commands with Discord API!');
       setTimeout(() => setMessage(''), 4000);
     } catch (err: any) {
-      setMessage(`Error syncing commands: ${err.response?.data?.error || 'Failed to sync'}`);
+      setMessage(`Error syncing commands: ${extractApiError(err, 'Failed to sync')}`);
     } finally {
       setSyncing(false);
     }
