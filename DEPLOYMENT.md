@@ -152,6 +152,12 @@ the boot with an explicit list of missing or placeholder credentials — that is
 > **Root Directory must be `client`.** Same monorepo reason as Render. If you leave it at
 > the repo root, Vercel will try to build the server too and fail.
 
+> **Why `client/vercel.json` must stay committed.** The app uses `BrowserRouter`, so
+> `/login`, `/dashboard/logs`, etc. are client-side routes with no matching file in
+> `dist`. Without the SPA rewrite, any hard load or refresh of those URLs returns
+> Vercel's `404 NOT_FOUND` page. The rewrite must live in `client/vercel.json` (Vercel reads
+> it from the configured Root Directory), not the repo root.
+
 3. **Environment Variables** — add one:
 
 | Key | Value |

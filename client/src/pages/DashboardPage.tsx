@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api } from '../api/axios_client.js';
+import { api, extractApiError } from '../api/axios_client.js';
 import { StatusBadge, PriorityBadge } from '../components/StatusBadge.js';
 import { Terminal, CheckCircle2, Cpu, Bell, RefreshCw } from 'lucide-react';
 
@@ -33,9 +33,11 @@ export const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentLogs, setRecentLogs] = useState<Log[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const fetchData = async () => {
     setLoading(true);
+    setError('');
     try {
       const [statsRes, logsRes] = await Promise.all([
         api.get('/dashboard/stats'),
@@ -44,7 +46,7 @@ export const DashboardPage: React.FC = () => {
       setStats(statsRes.data.stats);
       setRecentLogs(logsRes.data.logs);
     } catch (err) {
-      console.error('Failed to fetch dashboard data', err);
+      setError(extractApiError(err, 'Failed to fetch dashboard data'));
     } finally {
       setLoading(false);
     }
@@ -73,6 +75,12 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Metrics Grid */}
+      {error && (
+        <div className="p-3 bg-rose-950/60 border border-rose-800 rounded-lg text-rose-300 text-xs font-medium">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
           <div className="flex items-center justify-between text-slate-400 mb-3">
