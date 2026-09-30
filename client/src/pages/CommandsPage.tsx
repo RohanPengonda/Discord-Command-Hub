@@ -189,7 +189,7 @@ export const CommandsPage: React.FC = () => {
               <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
                 <div>
                   <span className="font-semibold block text-slate-100">Mirror Notification</span>
-                  <span className="text-xs text-slate-400">Post summary alert to 2nd channel or Slack webhook</span>
+                  <span className="text-xs text-slate-400">Post summary alert to 2nd Discord channel</span>
                 </div>
                 <input
                   type="checkbox"

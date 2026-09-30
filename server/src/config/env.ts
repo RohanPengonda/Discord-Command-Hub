@@ -20,7 +20,6 @@ const envSchema = z.object({
   DISCORD_MIRROR_CHANNEL_ID: z.string().optional().default(''),
   AI_PROVIDER: z.enum(['gemini', 'groq']).default('gemini'),
   AI_API_KEY: z.string().optional().default(''),
-  SLACK_WEBHOOK_URL: z.string().optional().default(''),
   BACKEND_URL: z.string().default('http://localhost:5000'),
   FRONTEND_URL: z.string().default('http://localhost:5173'),
   ALLOW_VERCEL_PREVIEWS: z.string().optional().default('false'),
@@ -54,6 +53,12 @@ export const ADMIN_COOKIE_OPTIONS = {
 
 const DISCORD_PLACEHOLDER_APP_ID = '123456789012345678';
 const DISCORD_PLACEHOLDER_PUBLIC_KEY = '0'.repeat(64);
+
+/**
+ * Placeholder channel ID shipped in .env.example. Treated as "unset" at runtime so
+ * a copy-pasted template never sends notifications to a bogus channel.
+ */
+export const DISCORD_PLACEHOLDER_CHANNEL_ID = '123456789012345678';
 
 /**
  * env.ts carries placeholder defaults for the Discord credentials so that local

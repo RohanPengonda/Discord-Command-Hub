@@ -15,7 +15,7 @@ This document maps every requirement from the project assignment to its implemen
 | REQ-09 | Slash Command Processing Engine | `server/src/services/discord/interaction.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-10 | Interaction Database Audit Recording | `server/src/repositories/interaction.repository.ts`, `server/src/repositories/log.repository.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-11 | Discord Bot Response (Inline or Webhook Followup) | `server/src/services/discord/discord_api.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
-| REQ-12 | Second Channel Notification Mirroring (Discord Channel / Webhook) | `server/src/services/notification.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
+| REQ-12 | Second Channel Notification Mirroring (Discord Channel) | `server/src/services/notification.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-13 | Authenticated Admin Dashboard Views (Logs, Stats, Config) | `client/src/pages/DashboardPage.tsx`, `LogsPage.tsx`, `CommandsPage.tsx` | `server/tests/auth.test.ts` | PASS |
 | REQ-14 | UI Configurable Command Behavior | `server/src/controllers/command.controller.ts`, `client/src/pages/CommandsPage.tsx` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-15 | Publicly Deployed Application (Render + Vercel + Neon) | Configuration / Deployment Docs (`README.md`) | `server/tests/discord_endpoint.test.ts` | PASS |

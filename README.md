@@ -73,7 +73,7 @@ A real-world, production-ready Discord slash command automation platform featuri
 - **3-Second SLA Compliance**: Fast commands (`/status`) respond inline with Type 4 (`CHANNEL_MESSAGE_WITH_SOURCE`). Slow commands (`/report`) immediately issue Type 5 (`DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE`) and process background AI + mirror webhooks asynchronously.
 - **Idempotency Protection**: Enforces database-level unique constraints on `interactionId` to prevent duplicate AI calls, duplicate database logs, or duplicate notification mirrors if Discord retries webhooks.
 - **AI-Powered Report Classification**: Summarizes incoming user reports, assigns category tags, and tags priority (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`) using Google Gemini or Groq, with a fail-open fallback mechanism.
-- **Second-Channel Notification Mirroring**: Mirrors report alerts to a configured second Discord channel or Slack incoming webhook.
+- **Second-Channel Notification Mirroring**: Mirrors report alerts to a configured second Discord channel.
 - **Interactive Discord Components**: Supports interactive Discord buttons (`[Resolve]`, `[Dismiss]`) and rich modal submit windows (`/report`).
 - **Authenticated Admin Dashboard**: Real-time Overview metrics, filterable audit history logs, dynamic command behavior configuration toggles, and Discord server/channel management.
 
@@ -189,7 +189,7 @@ Tests cover:
 1. **Login to Dashboard**: Navigate to `http://localhost:5173/login`. Login with `admin@example.com` / `admin123456`.
 2. **Execute `/status`**: In Discord, run `/status`. Verify inline green operational status message.
 3. **Execute `/report`**: In Discord, run `/report issue:"Checkout page payment failed"`. Observe immediate deferral acknowledgment followed by rich embed response with AI summary, category, priority, and `[Resolve]` / `[Dismiss]` buttons.
-4. **Verify Second Channel Mirror**: Check configured 2nd Discord channel or Slack webhook for mirrored notification alert.
+4. **Verify Second Channel Mirror**: Check the configured 2nd Discord channel for the mirrored notification alert.
 5. **Verify Audit Log in Dashboard**: Open Dashboard Audit Logs (`/dashboard/logs`) to verify recorded interaction log.
 6. **Test UI Command Configuration**: Go to `/dashboard/commands` -> Toggle `Mirror Notification` or `AI Processing` OFF -> Run `/report` in Discord again -> Verify behavior dynamically changes!
 

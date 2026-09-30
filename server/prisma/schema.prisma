@@ -139,7 +139,7 @@ model NotificationLog {
   commandLogId String     @unique
   commandLog   CommandLog @relation(fields: [commandLogId], references: [id], onDelete: Cascade)
   channelId    String
-  channelType  String     // DISCORD_CHANNEL | SLACK_WEBHOOK
+  channelType  String     // DISCORD_CHANNEL | NONE
   status       String     // SUCCESS | FAILED
   errorMessage String?
   payload      Json?
