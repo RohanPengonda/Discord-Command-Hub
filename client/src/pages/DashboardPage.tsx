@@ -146,8 +146,8 @@ export const DashboardPage: React.FC = () => {
           value={stats?.totalNotifications ?? 0}
           hint="Mirrored to 2nd channel"
           icon={<Bell className="w-4 h-4" />}
-          iconClass="text-amber-400"
-          valueClass="text-amber-400"
+          iconClass="text-yellow-400"
+          valueClass="text-yellow-400"
         />
       </div>
 

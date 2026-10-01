@@ -339,12 +339,12 @@ export const LogsPage: React.FC = () => {
               {/* Notification Mirror Log */}
               {selectedLog.notificationLog && (
                 <div>
-                  <h4 className="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">
+                  <h4 className="text-xs font-semibold text-yellow-400 uppercase tracking-wider mb-2">
                     Second Channel Notification Mirror
                   </h4>
-                  <div className="bg-amber-950/30 border border-amber-800/50 p-4 rounded-xl text-xs space-y-1">
-                    <p className="text-amber-200 font-semibold">Status: {selectedLog.notificationLog.status}</p>
-                    <p className="text-amber-300">Channel Type: {selectedLog.notificationLog.channelType}</p>
+                  <div className="bg-yellow-950/30 border border-yellow-800/50 p-4 rounded-xl text-xs space-y-1">
+                    <p className="text-yellow-200 font-semibold">Status: {selectedLog.notificationLog.status}</p>
+                    <p className="text-yellow-300">Channel Type: {selectedLog.notificationLog.channelType}</p>
                     <p className="text-slate-400 font-mono break-all">
                       Target Channel ID: {selectedLog.notificationLog.channelId}
                     </p>

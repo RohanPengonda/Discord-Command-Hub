@@ -4,19 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Primary brand — Discord Blurple (#5865F2)
         brand: {
-          50: '#FFF7F0',
-          100: '#FFEADD',
-          200: '#FFD2B0',
-          300: '#FFB37D',
-          400: '#FB8F42',
-          500: '#E8751A',
-          600: '#C55E12',
-          700: '#9E490E',
-          800: '#7C3A0E',
-          900: '#63300F',
-          950: '#351706',
-          DEFAULT: '#E8751A',
+          50: '#F1F3FE',
+          100: '#E1E5FE',
+          200: '#C5CDFC',
+          300: '#A3AFFB',
+          400: '#7D8BF8',
+          500: '#5865F2',
+          600: '#4752C4',
+          700: '#3C45A5',
+          800: '#2F3687',
+          900: '#25296C',
+          950: '#14163A',
+          DEFAULT: '#5865F2',
         },
         discord: {
           blurple: '#5865F2',

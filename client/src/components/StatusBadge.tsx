@@ -16,7 +16,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
       break;
     case 'PROCESSING':
     case 'DEFERRED':
-      badgeStyle = 'bg-amber-950 text-amber-400 border-amber-800';
+      badgeStyle = 'bg-fuchsia-950 text-fuchsia-400 border-fuchsia-800';
       break;
     case 'RECEIVED':
       badgeStyle = 'bg-sky-950 text-sky-400 border-sky-800';
