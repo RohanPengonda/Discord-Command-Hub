@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, extractApiError } from '../api/axios_client.js';
 import { StatusBadge, PriorityBadge } from '../components/StatusBadge.js';
-import { Terminal, CheckCircle2, Cpu, Bell, RefreshCw, Sparkles, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Terminal, CheckCircle2, Cpu, Bell, RefreshCw } from 'lucide-react';
 
 interface Stats {
   totalCommands: number;
@@ -11,19 +10,6 @@ interface Stats {
   deferredCommands: number;
   totalAiProcessed: number;
   totalNotifications: number;
-}
-
-interface AiLog {
-  id: string;
-  commandName: string;
-  username: string;
-  status: string;
-  createdAt: string;
-  aiResult?: {
-    summary: string;
-    category: string;
-    priority: string;
-  };
 }
 
 interface Log {
@@ -64,7 +50,6 @@ const MetricCard: React.FC<{
 export const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentLogs, setRecentLogs] = useState<Log[]>([]);
-  const [aiLogs, setAiLogs] = useState<AiLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -72,14 +57,12 @@ export const DashboardPage: React.FC = () => {
     setLoading(true);
     setError('');
     try {
-      const [statsRes, logsRes, aiRes] = await Promise.all([
+      const [statsRes, logsRes] = await Promise.all([
         api.get('/dashboard/stats'),
         api.get('/dashboard/logs?limit=5'),
-        api.get('/dashboard/logs?limit=6&aiOnly=true'),
       ]);
       setStats(statsRes.data.stats);
       setRecentLogs(logsRes.data.logs);
-      setAiLogs(aiRes.data.logs);
     } catch (err) {
       setError(extractApiError(err, 'Failed to fetch dashboard data'));
     } finally {
