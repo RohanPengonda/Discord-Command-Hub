@@ -37,7 +37,7 @@ export class AIService {
         const client = this.getGeminiClient();
         if (!client) return fallback;
 
-        const model = client.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        const model = client.getGenerativeModel({ model: env.AI_MODEL });
         const prompt = `Analyze the following issue report from a Discord user. 
 Provide your response strictly as a JSON object without markdown formatting or code blocks.
 JSON format:

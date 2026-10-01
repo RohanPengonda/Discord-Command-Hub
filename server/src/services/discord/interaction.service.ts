@@ -16,18 +16,12 @@ export class DiscordInteractionService {
 
     logger.info(`Received Discord Interaction [ID: ${id}, Type: ${type}, Command: ${commandName}]`);
 
-    // 1. Handle Type 1: PING interaction immediately
-    // Discord validates the Interactions Endpoint URL by sending a signed PING
-    // and refuses to save the URL if the reply is not an immediate PONG. A PING
-    // carries no side effect worth auditing, so it must never reach the database.
+    // Discord validates the endpoint URL with a signed PING and needs an immediate PONG, so this must never touch the database.
     if (type === 1) {
       return { type: 1 }; // PONG
     }
 
-    // 2. Idempotency guard. `ProcessedInteraction.id` is the Discord interaction
-    // ID, so the unique insert is itself the duplicate check: a replayed
-    // interaction fails with P2002 instead of re-running its side effects. One
-    // round trip, and it runs before any side effect.
+    // The unique insert is also the duplicate check: a replay throws P2002 instead of re-running side effects.
     try {
       await InteractionRepository.recordInteraction({
         id,

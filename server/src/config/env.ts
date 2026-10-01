@@ -20,6 +20,7 @@ const envSchema = z.object({
   DISCORD_MIRROR_CHANNEL_ID: z.string().optional().default(''),
   AI_PROVIDER: z.enum(['gemini', 'groq']).default('gemini'),
   AI_API_KEY: z.string().optional().default(''),
+  AI_MODEL: z.string().optional().default('gemini-3.6-flash'),
   BACKEND_URL: z.string().default('http://localhost:5000'),
   FRONTEND_URL: z.string().default('http://localhost:5173'),
   ALLOW_VERCEL_PREVIEWS: z.string().optional().default('false'),
@@ -27,21 +28,11 @@ const envSchema = z.object({
 
 export const env = envSchema.parse(process.env);
 
-/**
- * FRONTEND_URL may be a comma-separated list of allowed origins.
- */
 export const ALLOWED_ORIGINS: string[] = env.FRONTEND_URL.split(',')
   .map((o) => o.trim())
   .filter(Boolean);
 
-const LOCAL_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173'];
-
-/**
- * True when the dashboard is served from a different site than the API
- * (e.g. *.vercel.app talking to *.onrender.com). Browsers refuse to attach a
- * SameSite=Lax cookie to cross-site XHR, so cross-origin deployments must use
- * SameSite=None; Secure. Both require HTTPS on the frontend.
- */
+// Cross-site dashboards (vercel.app -> onrender.com) need SameSite=None; Secure, which requires HTTPS on both.
 export const IS_CROSS_ORIGIN = ALLOWED_ORIGINS.some((o) => o.startsWith('https://'));
 
 export const ADMIN_COOKIE_OPTIONS = {
@@ -54,19 +45,9 @@ export const ADMIN_COOKIE_OPTIONS = {
 const DISCORD_PLACEHOLDER_APP_ID = '123456789012345678';
 const DISCORD_PLACEHOLDER_PUBLIC_KEY = '0'.repeat(64);
 
-/**
- * Placeholder channel ID shipped in .env.example. Treated as "unset" at runtime so
- * a copy-pasted template never sends notifications to a bogus channel.
- */
 export const DISCORD_PLACEHOLDER_CHANNEL_ID = '123456789012345678';
 
-/**
- * env.ts carries placeholder defaults for the Discord credentials so that local
- * dev and unit tests can boot without a real bot. In production those defaults
- * are dangerous: a forgotten DISCORD_PUBLIC_KEY silently becomes 64 zeros, every
- * Ed25519 check fails, and Discord reports only "The application did not respond".
- * Fail loudly at boot instead.
- */
+// Placeholder defaults let local dev boot, but in production they fail every Ed25519 check and Discord only reports "did not respond".
 export function assertProductionDiscordConfig(): void {
   if (env.NODE_ENV !== 'production') return;
 

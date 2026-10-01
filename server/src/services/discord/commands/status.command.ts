@@ -10,10 +10,7 @@ export class StatusCommandHandler {
     const username = interaction.member?.user?.username || interaction.user?.username || 'unknown';
     const serverId = interaction.guild_id || null;
 
-    // getDbAvailable() holds the result of the last successful probe, so the
-    // reply costs no query. A `SELECT 1` on this path cost ~250ms of Discord's
-    // 3 second budget. Re-probing in the background keeps the value fresh for
-    // the next invocation.
+    // Reading the cached flag instead of SELECT 1 keeps this off Discord's 3 second budget.
     const dbConnected = getDbAvailable();
     void checkDbConnection().catch(() => undefined);
 
@@ -26,8 +23,7 @@ export class StatusCommandHandler {
 • **Uptime:** ${uptimeStr}
 • **Environment:** ${process.env.NODE_ENV || 'development'}`;
 
-    // Audited after the reply is built: the acknowledgement must leave inside
-    // Discord's 3 second window, the log row does not have to.
+    // Logged after the reply is built, since only the acknowledgement is on Discord's clock.
     void LogRepository.createLog({
       interactionId,
       serverId,

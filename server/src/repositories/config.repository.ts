@@ -67,12 +67,7 @@ export class ConfigRepository {
     }
   }
 
-  /**
-   * Create a command_configurations row for every registered command that is
-   * missing one for this server. Existing rows are never modified, so admin
-   * toggles survive re-provisioning. This is what makes the Commands page
-   * reflect the slash commands that are actually registered with Discord.
-   */
+  // Creates a row per registered command without touching existing rows, so admin toggles survive re-provisioning.
   static async ensureConfigsForServer(serverId: string) {
     if (!getDbAvailable()) {
       for (const commandName of COMMAND_NAMES) {
@@ -102,7 +97,6 @@ export class ConfigRepository {
         });
       }
 
-      // Drop stale in-memory entries so later getConfig() calls read the DB row.
       for (const key of Array.from(inMemoryConfigs.keys())) {
         if (key.startsWith(`${serverId}_`)) inMemoryConfigs.delete(key);
       }

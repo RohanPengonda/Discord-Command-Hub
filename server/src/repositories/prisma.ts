@@ -25,22 +25,11 @@ export async function checkDbConnection(): Promise<boolean> {
   }
 }
 
-export function setDbAvailable(available: boolean) {
-  isDbAvailable = available;
-}
-
 export function getDbAvailable(): boolean {
   return isDbAvailable;
 }
 
-/**
- * Neon (and most serverless Postgres) scale to zero, so the first connection
- * after an idle period can fail or hang. Without a retry, one unlucky boot
- * leaves `isDbAvailable` false for the whole process lifetime: every repository
- * silently serves the empty in-memory fallback, the Commands page renders
- * "No command configurations yet", and the logs stay empty even though the rows
- * are in the database. Re-probe until the connection is healthy again.
- */
+// Neon scales to zero, so one failed boot probe would otherwise leave every repository on its empty in-memory fallback forever.
 export function startDbReconnectMonitor(intervalMs = 30_000): void {
   if (isDbAvailable) return;
 

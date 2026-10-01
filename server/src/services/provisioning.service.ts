@@ -4,15 +4,7 @@ import { ServerRepository } from '../repositories/server.repository.js';
 import { ConfigRepository } from '../repositories/config.repository.js';
 import { COMMAND_DEFINITIONS } from './discord/command_definitions.js';
 
-/**
- * Creates the database rows the admin dashboard reads, based on the
- * DISCORD_GUILD_ID / channel env vars. Registering slash commands with the
- * Discord REST API does NOT touch the database, so without this step the
- * Commands page has nothing to render.
- *
- * Every operation is an idempotent upsert/create-if-missing, so existing admin
- * settings are preserved.
- */
+// Slash command registration never touches the database, so these rows are what the Commands page renders.
 export class ProvisioningService {
   static async ensureDashboardRows(): Promise<void> {
     if (!env.DISCORD_GUILD_ID) {

@@ -38,10 +38,7 @@ export const COMMAND_DEFINITIONS: CommandDefinition[] = [
 
 export const COMMAND_NAMES: string[] = COMMAND_DEFINITIONS.map((c) => c.name);
 
-/**
- * Applied when a command_configurations row is first created.
- * Never used to overwrite an existing row, so admin toggles survive re-provisioning.
- */
+// Applied only on row creation, so admin toggles survive re-provisioning.
 export const DEFAULT_COMMAND_SETTINGS = {
   enabled: true,
   saveLogs: true,
@@ -50,6 +47,3 @@ export const DEFAULT_COMMAND_SETTINGS = {
   aiProcessing: true,
 };
 
-export function hasCommand(name: string | null | undefined): boolean {
-  return !!name && COMMAND_NAMES.includes(name);
-}

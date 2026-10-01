@@ -28,16 +28,6 @@ export class ServerRepository {
     });
   }
 
-  static async findServerById(id: string) {
-    return prisma.discordServer.findUnique({
-      where: { id },
-      include: {
-        channels: true,
-        commandConfigs: true,
-      },
-    });
-  }
-
   static async upsertChannel(data: {
     id: string;
     serverId: string;

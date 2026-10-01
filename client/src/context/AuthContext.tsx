@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '../api/axios_client.js';
+import { api, setAuthToken } from '../api/axios_client.js';
 
 interface User {
   id: string;
@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(res.data.user);
     } catch (err) {
       setUser(null);
+      setAuthToken(null);
     } finally {
       setLoading(false);
     }
@@ -38,11 +39,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     const res = await api.post('/auth/login', { email, password });
+    setAuthToken(res.data.token);
     setUser(res.data.user);
   };
 
   const logout = async () => {
     await api.post('/auth/logout');
+    setAuthToken(null);
     setUser(null);
   };
 
