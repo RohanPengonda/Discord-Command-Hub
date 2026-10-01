@@ -72,16 +72,20 @@ describe('Discord Interaction Endpoint Tests (/api/discord/interactions)', () =>
   it('should detect duplicate interaction ID and reject duplicate processing (Idempotency)', async () => {
     const interactionId = 'duplicate_id_' + Date.now();
 
-    // First call
+    // First call. Uses a command rather than a PING: PINGs are answered without
+    // touching the database, so they are never recorded as processed.
     const res1 = await request(app)
       .post('/api/discord/interactions')
       .set('x-bypass-signature', 'true')
       .send({
         id: interactionId,
-        type: 1,
+        type: 2,
         token: 'test_token',
+        data: { name: 'status' },
+        member: { user: { id: '321', username: 'first_user' } },
       });
     expect(res1.status).toBe(200);
+    expect(res1.body.type).toBe(4);
 
     // Second call with same interactionId
     const res2 = await request(app)
@@ -92,6 +96,7 @@ describe('Discord Interaction Endpoint Tests (/api/discord/interactions)', () =>
         type: 2,
         token: 'test_token',
         data: { name: 'status' },
+        member: { user: { id: '321', username: 'first_user' } },
       });
 
     expect(res2.status).toBe(200);

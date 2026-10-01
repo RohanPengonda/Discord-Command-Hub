@@ -11,6 +11,7 @@ import { env, ALLOWED_ORIGINS, IS_CROSS_ORIGIN } from './config/env.js';
 import { requestLogger } from './middleware/request_logger.middleware.js';
 import { errorHandler } from './middleware/error.middleware.js';
 import { logger } from './utils/logger.js';
+import { getDbAvailable } from './repositories/prisma.js';
 
 import authRoutes from './routes/auth.routes.js';
 import discordRoutes from './routes/discord.routes.js';
@@ -99,8 +100,12 @@ if (env.NODE_ENV !== 'test') {
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
-  res.json({
+  const databaseUp = getDbAvailable();
+  res.status(databaseUp ? 200 : 503).json({
+    // `status` stays "ok" so Render's health check keeps passing while the
+    // database is down; `database` is the field to alert on.
     status: 'ok',
+    database: databaseUp ? 'connected' : 'unavailable',
     timestamp: new Date().toISOString(),
     env: env.NODE_ENV,
     service: 'discord-automation-backend',

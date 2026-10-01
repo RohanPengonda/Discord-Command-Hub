@@ -33,6 +33,34 @@ export function getDbAvailable(): boolean {
   return isDbAvailable;
 }
 
+/**
+ * Neon (and most serverless Postgres) scale to zero, so the first connection
+ * after an idle period can fail or hang. Without a retry, one unlucky boot
+ * leaves `isDbAvailable` false for the whole process lifetime: every repository
+ * silently serves the empty in-memory fallback, the Commands page renders
+ * "No command configurations yet", and the logs stay empty even though the rows
+ * are in the database. Re-probe until the connection is healthy again.
+ */
+export function startDbReconnectMonitor(intervalMs = 30_000): void {
+  if (isDbAvailable) return;
+
+  const timer = setInterval(async () => {
+    try {
+      await prisma.$connect();
+      const recovered = await checkDbConnection();
+      if (recovered) {
+        logger.info('Database connection recovered. Resuming persistent reads and writes.');
+        clearInterval(timer);
+      }
+    } catch (err: any) {
+      logger.warn('Database still unreachable, will retry', { error: err.message });
+    }
+  }, intervalMs);
+
+  // Never hold the process open just for the health check.
+  if (typeof timer.unref === 'function') timer.unref();
+}
+
 prisma.$on('error' as never, (e: any) => {
   logger.error('Prisma Error', { message: e.message });
 });

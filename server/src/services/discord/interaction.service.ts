@@ -17,35 +17,17 @@ export class DiscordInteractionService {
     logger.info(`Received Discord Interaction [ID: ${id}, Type: ${type}, Command: ${commandName}]`);
 
     // 1. Handle Type 1: PING interaction immediately
+    // Discord validates the Interactions Endpoint URL by sending a signed PING
+    // and refuses to save the URL if the reply is not an immediate PONG. A PING
+    // carries no side effect worth auditing, so it must never reach the database.
     if (type === 1) {
-      // Record PING interaction so idempotency tracking captures it
-      try {
-        await InteractionRepository.recordInteraction({
-          id,
-          type,
-          commandName: 'ping',
-          userId,
-          username,
-          token: token || 'ping_token',
-        });
-      } catch (e) {}
       return { type: 1 }; // PONG
     }
 
-    // 2. Check Idempotency (Duplicate Interaction Protection)
-    const isAlreadyProcessed = await InteractionRepository.isProcessed(id);
-    if (isAlreadyProcessed) {
-      logger.warn(`Duplicate interaction detected [ID: ${id}]. Skipping duplicate side effects.`);
-      return {
-        type: 4, // CHANNEL_MESSAGE_WITH_SOURCE
-        data: {
-          content: '⚠️ This command interaction was already processed.',
-          flags: 64, // Ephemeral
-        },
-      };
-    }
-
-    // 3. Record processed interaction to enforce uniqueness
+    // 2. Idempotency guard. `ProcessedInteraction.id` is the Discord interaction
+    // ID, so the unique insert is itself the duplicate check: a replayed
+    // interaction fails with P2002 instead of re-running its side effects. One
+    // round trip, and it runs before any side effect.
     try {
       await InteractionRepository.recordInteraction({
         id,
@@ -58,16 +40,20 @@ export class DiscordInteractionService {
         token,
       });
     } catch (err: any) {
-      logger.error(`Failed to record interaction ${id}`, { error: err.message });
       if (err.code === 'P2002') {
+        logger.warn(`Duplicate interaction detected [ID: ${id}]. Skipping duplicate side effects.`);
         return {
-          type: 4,
-          data: { content: '⚠️ Duplicate interaction request ignored.', flags: 64 },
+          type: 4, // CHANNEL_MESSAGE_WITH_SOURCE
+          data: {
+            content: '⚠️ This command interaction was already processed.',
+            flags: 64, // Ephemeral
+          },
         };
       }
+      logger.error(`Failed to record interaction ${id}`, { error: err.message });
     }
 
-    // 4. Handle Type 2: Slash Commands
+    // 3. Handle Type 2: Slash Commands
     if (type === 2) {
       switch (commandName) {
         case 'status':
@@ -82,12 +68,12 @@ export class DiscordInteractionService {
       }
     }
 
-    // 5. Handle Type 3: Interactive Components (Buttons)
+    // 4. Handle Type 3: Interactive Components (Buttons)
     if (type === 3) {
       return ButtonComponentHandler.handle(interaction);
     }
 
-    // 6. Handle Type 5: Modal Submissions
+    // 5. Handle Type 5: Modal Submissions
     if (type === 5) {
       return ModalComponentHandler.handle(interaction);
     }

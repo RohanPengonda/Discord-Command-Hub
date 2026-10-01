@@ -128,8 +128,14 @@ The dashboard UI itself still works on the free tier — it just takes a few sec
 Open `https://<your-service>.onrender.com/health`. Expect:
 
 ```json
-{ "status": "ok", "env": "production", "service": "discord-automation-backend" }
+{ "status": "ok", "database": "connected", "env": "production", "service": "discord-automation-backend" }
 ```
+
+`status` stays `"ok"` whenever the process is up so Render's health check never
+fails the deploy. **`database` is the field to watch**: `"unavailable"` means Neon
+was unreachable at boot, and the dashboard is serving empty in-memory fallbacks
+until it recovers. The backend retries every 30 seconds and logs
+`Database connection recovered`, so an outage self-heals without a redeploy.
 
 If the deploy failed, check Render's logs. `assertProductionDiscordConfig()` now aborts
 the boot with an explicit list of missing or placeholder credentials — that is intentional.
@@ -257,6 +263,8 @@ the Commands page picks it up after the next deploy. Register it with Discord us
 | *"The application did not respond"* | Discord cannot reach the backend, **or** the Render free instance is asleep | Use a paid instance; visit `/health` before using the bot |
 | Same error, paid instance | `DISCORD_PUBLIC_KEY` wrong, or URL missing `/api/discord/interactions` | Compare the key against the Discord portal; check the path |
 | Dashboard shows no commands | `FRONTEND_URL` on Render does not match the Vercel URL | Update it and redeploy (§4) |
+| Dashboard empty but you are logged in | Neon unreachable, so every repository is on its in-memory fallback | Check `/health` for `"database":"unavailable"`; it retries every 30s |
+| Slow replies, occasional *"did not respond"* | Neon latency eating the 3s budget | Check the interaction durations in Render logs; keep DB writes off the reply path |
 | Login spinner, then 401 | Same-site cookie rejected | `FRONTEND_URL` must be the exact `https://` origin; the cookie is `SameSite=None; Secure`, so both sites must be HTTPS |
 | CORS error in the browser console | Origin not in the allowlist | Check the exact origin, including scheme and any trailing slash |
 | Render logs `prepared statement ... already exists` | Neon pooled endpoint + Prisma | Append `&pgbouncer=true&connection_limit=1` to `DATABASE_URL` |

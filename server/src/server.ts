@@ -1,7 +1,7 @@
 import app from './app.js';
 import { env, assertProductionDiscordConfig } from './config/env.js';
 import { logger } from './utils/logger.js';
-import { prisma, checkDbConnection } from './repositories/prisma.js';
+import { prisma, checkDbConnection, startDbReconnectMonitor } from './repositories/prisma.js';
 import { ProvisioningService } from './services/provisioning.service.js';
 
 const PORT = env.PORT || 5000;
@@ -16,7 +16,10 @@ async function startServer() {
     await prisma.$connect();
     const dbReady = await checkDbConnection();
     if (!dbReady) {
-      logger.error('Database is unreachable. The dashboard will run on in-memory fallbacks and show empty data.');
+      logger.error(
+        'Database is unreachable at boot. The dashboard will run on in-memory fallbacks and show empty data until the connection recovers. Retrying every 30s.'
+      );
+      startDbReconnectMonitor();
     } else {
       logger.info('Database connected successfully via Prisma ORM.');
 
