@@ -151,7 +151,7 @@ export const DashboardPage: React.FC = () => {
         />
       </div>
 
-      {/* AI Insights Section */}
+      {/* AI Insights Section
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
           <div className="flex items-center gap-2 min-w-0">
@@ -215,7 +215,7 @@ export const DashboardPage: React.FC = () => {
             ))}
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Recent Activity Table */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 sm:p-6">
