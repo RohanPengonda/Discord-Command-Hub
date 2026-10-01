@@ -27,7 +27,6 @@ interface Log {
   interaction?: {
     id: string;
     type: number;
-    token: string;
   };
 }
 

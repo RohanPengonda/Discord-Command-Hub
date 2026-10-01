@@ -50,7 +50,7 @@ export class ProvisioningService {
 
 await ConfigRepository.ensureConfigsForServer(serverId);
 
-for (const command of COMMAND_DEFINITIONS) {
+    for (const command of COMMAND_DEFINITIONS) {
       const config = await ConfigRepository.getConfig(serverId, command.name);
       if (!config) continue;
 

@@ -187,7 +187,8 @@ export class LogRepository {
         prisma.commandLog.findMany({
           where,
           include: {
-            interaction: true,
+            // token is a webhook credential: anyone holding it can edit/send as the bot on the original reply. Never return it.
+            interaction: { select: { id: true, type: true, commandName: true, userId: true, username: true, serverId: true, channelId: true, processedAt: true } },
             server: true,
             aiResult: true,
             notificationLog: true,
