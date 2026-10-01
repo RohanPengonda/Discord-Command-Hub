@@ -102,8 +102,8 @@ Your database is already created and migrated, so there is nothing to do. Two th
 | `DISCORD_GUILD_ID` | `1554394371917353040` | Keeps commands guild-scoped (instant) |
 | `DISCORD_PRIMARY_CHANNEL_ID` | `1554395984157614110` | |
 | `DISCORD_MIRROR_CHANNEL_ID` | `1554396626058092554` | |
-| `AI_PROVIDER` | `gemini` | |
-| `AI_API_KEY` | your Gemini/Groq key | **Secret** |
+| `AI_API_KEY` | your Gemini key | **Secret** |
+| `AI_MODEL` | `gemini-2.5-flash` | Optional. Any Gemini model id |
 | `BACKEND_URL` | `https://discord-automation-api.onrender.com` | Replace with your real service name |
 | `FRONTEND_URL` | `https://placeholder.vercel.app` | **Update in step 4** once Vercel exists |
 | `ALLOW_VERCEL_PREVIEWS` | `false` | Set `true` only if you want Vercel preview URLs to work |

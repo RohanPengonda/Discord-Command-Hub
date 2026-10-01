@@ -315,7 +315,7 @@ export const LogsPage: React.FC = () => {
               {selectedLog.aiResult && (
                 <div>
                   <h4 className="text-xs font-semibold text-brand-400 uppercase tracking-wider mb-2">
-                    AI Categorization (Gemini/Groq)
+                    AI Categorization (Gemini)
                   </h4>
                   <div className="bg-brand-950/40 border border-brand-800/60 p-4 rounded-xl space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">

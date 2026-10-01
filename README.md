@@ -1,6 +1,6 @@
 # Discord Slash-Command Automation Dashboard
 
-A real-world, production-ready Discord slash command automation platform featuring secure Ed25519 webhook verification, deferred interaction processing, AI issue classification (Google Gemini / Groq), second-channel notification mirroring, and an authenticated management dashboard.
+A real-world, production-ready Discord slash command automation platform featuring secure Ed25519 webhook verification, deferred interaction processing, AI issue classification (Google Gemini), second-channel notification mirroring, and an authenticated management dashboard.
 
 ---
 
@@ -44,7 +44,7 @@ A real-world, production-ready Discord slash command automation platform featuri
                    ├─────────────────────────────────────────────┤
                    │ 1. Fetch Server & Command Config from DB    │
                    │ 2. Execute Command Business Logic           │
-                   │ 3. Call AI Service (Gemini/Groq) if enabled │
+                   │ 3. Call AI Service (Gemini) if enabled                   │
                    │ 4. Persist CommandLog, Interaction, AI log  │
                    │ 5. Follow-up Discord Response (Webhook API) │
                    │ 6. Send Mirror Notification (2nd Channel)   │
@@ -72,7 +72,7 @@ A real-world, production-ready Discord slash command automation platform featuri
 - **Secure Ed25519 Signature Verification**: Validates raw HTTP request body against Discord's public key using `X-Signature-Ed25519` and `X-Signature-Timestamp` headers.
 - **3-Second SLA Compliance**: Fast commands (`/status`) respond inline with Type 4 (`CHANNEL_MESSAGE_WITH_SOURCE`). Slow commands (`/report`) immediately issue Type 5 (`DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE`) and process background AI + mirror webhooks asynchronously.
 - **Idempotency Protection**: Enforces database-level unique constraints on `interactionId` to prevent duplicate AI calls, duplicate database logs, or duplicate notification mirrors if Discord retries webhooks.
-- **AI-Powered Report Classification**: Summarizes incoming user reports, assigns category tags, and tags priority (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`) using Google Gemini or Groq, with a fail-open fallback mechanism.
+- **AI-Powered Report Classification**: Summarizes incoming user reports, assigns category tags, and tags priority (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`) using Google Gemini, with a fail-open fallback mechanism.
 - **Second-Channel Notification Mirroring**: Mirrors report alerts to a configured second Discord channel.
 - **Interactive Discord Components**: Supports interactive Discord buttons (`[Resolve]`, `[Dismiss]`) and rich modal submit windows (`/report`).
 - **Authenticated Admin Dashboard**: Real-time Overview metrics, filterable audit history logs, dynamic command behavior configuration toggles, and Discord server/channel management.
@@ -84,7 +84,7 @@ A real-world, production-ready Discord slash command automation platform featuri
 - **Backend**: Node.js, Express, TypeScript, Zod, Winston, TweetNaCl, Discord-Interactions
 - **Frontend**: React 19, TypeScript, Vite, Tailwind CSS, Lucide Icons
 - **Database**: PostgreSQL with Prisma ORM
-- **AI Provider**: Google Gemini (`@google/generative-ai`) / Groq API
+- **AI Provider**: Google Gemini (`@google/generative-ai`)
 - **Deployment Targets**: Render (Backend), Vercel (Frontend), Neon (PostgreSQL)
 
 ---
@@ -109,7 +109,7 @@ DISCORD_APPLICATION_ID="your_discord_application_id"
 DISCORD_PUBLIC_KEY="your_discord_public_key"
 DISCORD_BOT_TOKEN="your_discord_bot_token"
 DISCORD_GUILD_ID="your_test_guild_id"
-AI_API_KEY="your_gemini_or_groq_api_key"
+AI_API_KEY="your_gemini_api_key"
 JWT_SECRET="super_secret_jwt_key_min_32_characters"
 ```
 

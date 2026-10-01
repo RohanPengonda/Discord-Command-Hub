@@ -202,7 +202,7 @@ export const CommandsPage: React.FC = () => {
               {config.commandName === 'report' && (
                 <ToggleRow
                   accent
-                  label="AI Processing (Gemini/Groq)"
+                  label="AI Processing (Gemini)"
                   hint="Analyze summary, category, and priority"
                   checked={config.aiProcessing}
                   onChange={() => handleToggle(config.id, 'aiProcessing')}

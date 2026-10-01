@@ -6,7 +6,7 @@
   - Selected Express + TypeScript for the backend to ensure reliable raw body buffer handling required by Discord Ed25519 signature verification.
   - Selected Prisma ORM with PostgreSQL for strict relational schema enforcement, primary/foreign keys, and database-level unique constraints on `interactionId`.
   - Implemented immediate interaction deferral (`DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE`) for slow commands to satisfy Discord's strict 3-second webhook response SLA.
-  - Formulated a decoupled AI Provider strategy (supporting both Google Gemini and Groq) with fail-open fallback so that AI outages do not block primary Discord message reporting.
+  - Formulated a fail-open AI processing strategy (Google Gemini only) so that AI outages do not block primary Discord message reporting.
 
 ## Key Challenges & AI Edge Cases Solved
 1. **Raw Request Body Truncation / Parsing Bug**:

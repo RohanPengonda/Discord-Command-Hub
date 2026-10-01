@@ -30,5 +30,5 @@ This document maps every requirement from the project assignment to its implemen
 | REQ-24 | Evaluator Live Testing Setup & Scripts | `server/src/scripts/register_commands.ts` | Live E2E Audit | PASS |
 | REQ-25 | Stretch: Interactive Discord Buttons ([Resolve], [Dismiss]) | `server/src/services/discord/components/button.handler.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-26 | Stretch: Discord Modal Support (`/report`) | `server/src/services/discord/components/modal.handler.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
-| REQ-27 | Stretch: AI Processing (Gemini/Groq) for `/report` | `server/src/services/ai/ai.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
+| REQ-27 | Stretch: AI Processing (Gemini) for `/report` | `server/src/services/ai/ai.service.ts` | `server/tests/discord_endpoint.test.ts` | PASS |
 | REQ-28 | Stretch: Multi-Server Isolation Support | `server/src/repositories/server.repository.ts`, DB Schema | `server/tests/discord_endpoint.test.ts` | PASS |

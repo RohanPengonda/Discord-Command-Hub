@@ -136,7 +136,7 @@ export const DashboardPage: React.FC = () => {
         <MetricCard
           label="AI Summaries"
           value={stats?.totalAiProcessed ?? 0}
-          hint="Processed by Gemini/Groq"
+          hint="Processed by Gemini"
           icon={<Cpu className="w-4 h-4" />}
           iconClass="text-brand-400"
           valueClass="text-brand-400"
@@ -160,7 +160,7 @@ export const DashboardPage: React.FC = () => {
             </div>
             <div className="min-w-0">
               <h2 className="text-base font-bold text-white truncate">AI Insights</h2>
-              <p className="text-xs text-slate-400 truncate">Full untruncated summaries from Gemini/Groq</p>
+              <p className="text-xs text-slate-400 truncate">Full untruncated summaries from Google Gemini</p>
             </div>
           </div>
           <Link
