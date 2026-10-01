@@ -257,6 +257,7 @@ Resolution order is `BACKEND_API_URL` → `VITE_API_URL` → `/api`. In a produc
 
 There is **no seed script and no default admin account**. `README`s that advertise `admin@example.com / admin123456` are wrong, and so would be any credentials baked into this repo.
 
+
 The `AdminUser` table starts empty, and `AuthController.login` self-seeds: if the submitted email isn't found **and** `countAdmins() === 0`, the submitted password is bcrypt-hashed (cost 10) and an admin named `Initial Admin` is created. So:
 
 1. Start the app, open `http://localhost:5173/login`.
