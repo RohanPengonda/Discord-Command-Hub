@@ -16,6 +16,29 @@ interface CommandConfig {
   };
 }
 
+interface ToggleRowProps {
+  label: string;
+  hint: string;
+  checked: boolean;
+  onChange: () => void;
+  accent?: boolean;
+}
+
+const ToggleRow: React.FC<ToggleRowProps> = ({ label, hint, checked, onChange, accent }) => (
+  <label className="flex items-center justify-between gap-3 p-3 sm:p-3.5 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer">
+    <span className="min-w-0">
+      <span className={`font-semibold block text-sm ${accent ? 'text-brand-300' : 'text-slate-100'}`}>{label}</span>
+      <span className={`text-xs ${accent ? 'text-brand-400/80' : 'text-slate-400'}`}>{hint}</span>
+    </span>
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      className={`w-5 h-5 shrink-0 accent-brand-500 rounded cursor-pointer`}
+    />
+  </label>
+);
+
 export const CommandsPage: React.FC = () => {
   const [configs, setConfigs] = useState<CommandConfig[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,9 +70,7 @@ export const CommandsPage: React.FC = () => {
   }, []);
 
   const handleToggle = (id: string, field: keyof CommandConfig) => {
-    setConfigs((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, [field]: !c[field] } : c))
-    );
+    setConfigs((prev) => prev.map((c) => (c.id === id ? { ...c, [field]: !c[field] } : c)));
   };
 
   const handleSave = async (config: CommandConfig) => {
@@ -76,17 +97,20 @@ export const CommandsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Command Behavior Configurations</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+            Command Behavior Configurations
+          </h1>
           <p className="text-sm text-slate-400 mt-1">
-            Configure dynamic slash command features. Toggling options updates real application behavior in real-time.
+            Configure dynamic slash command features. Toggling options updates real application behavior in
+            real-time.
           </p>
         </div>
         <button
           onClick={fetchConfigs}
           disabled={loading}
-          className="flex items-center gap-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs font-semibold px-3 py-2 rounded-lg transition-colors self-start sm:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           Reload
@@ -95,7 +119,7 @@ export const CommandsPage: React.FC = () => {
 
       {successMsg && (
         <div className="p-3 bg-emerald-950/70 border border-emerald-800 rounded-xl text-emerald-300 text-xs flex items-center gap-2">
-          <Check className="w-4 h-4 text-emerald-400" />
+          <Check className="w-4 h-4 text-emerald-400 shrink-0" />
           {successMsg}
         </div>
       )}
@@ -122,23 +146,27 @@ export const CommandsPage: React.FC = () => {
       )}
 
       {/* Config Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {configs.map((config) => (
-          <div key={config.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 rounded-xl">
+          <div key={config.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-800">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="p-2.5 bg-brand-500/15 text-brand-400 border border-brand-500/30 rounded-xl shrink-0">
                   <Bot className="w-5 h-5" />
                 </div>
-                <div>
-                  <h3 className="font-mono font-bold text-lg text-white">/{config.commandName}</h3>
-                  <span className="text-xs text-slate-400">Server: {config.server?.name || config.serverId}</span>
+                <div className="min-w-0">
+                  <h3 className="font-mono font-bold text-base sm:text-lg text-white truncate">
+                    /{config.commandName}
+                  </h3>
+                  <span className="text-xs text-slate-400 block truncate">
+                    Server: {config.server?.name || config.serverId}
+                  </span>
                 </div>
               </div>
               <button
                 onClick={() => handleSave(config)}
                 disabled={savingId === config.id}
-                className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg shadow-indigo-600/20 transition-all"
+                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-brand-500 hover:bg-brand-400 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg shadow-brand-600/20 transition-all shrink-0"
               >
                 <Save className="w-3.5 h-3.5" />
                 {savingId === config.id ? 'Saving...' : 'Save Settings'}
@@ -146,72 +174,39 @@ export const CommandsPage: React.FC = () => {
             </div>
 
             {/* Config Toggles */}
-            <div className="space-y-4 text-sm text-slate-200">
-              <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                <div>
-                  <span className="font-semibold block text-slate-100">Command Enabled</span>
-                  <span className="text-xs text-slate-400">Allow users to execute this command in Discord</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={config.enabled}
-                  onChange={() => handleToggle(config.id, 'enabled')}
-                  className="w-5 h-5 accent-indigo-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                <div>
-                  <span className="font-semibold block text-slate-100">Save Execution Logs</span>
-                  <span className="text-xs text-slate-400">Persist audit trail history in database</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={config.saveLogs}
-                  onChange={() => handleToggle(config.id, 'saveLogs')}
-                  className="w-5 h-5 accent-indigo-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                <div>
-                  <span className="font-semibold block text-slate-100">Reply in Discord</span>
-                  <span className="text-xs text-slate-400">Send Rich Embed reply back to Discord channel</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={config.replyInDiscord}
-                  onChange={() => handleToggle(config.id, 'replyInDiscord')}
-                  className="w-5 h-5 accent-indigo-600 rounded cursor-pointer"
-                />
-              </div>
-
-              <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                <div>
-                  <span className="font-semibold block text-slate-100">Mirror Notification</span>
-                  <span className="text-xs text-slate-400">Post summary alert to 2nd Discord channel</span>
-                </div>
-                <input
-                  type="checkbox"
-                  checked={config.mirrorNotification}
-                  onChange={() => handleToggle(config.id, 'mirrorNotification')}
-                  className="w-5 h-5 accent-indigo-600 rounded cursor-pointer"
-                />
-              </div>
-
+            <div className="space-y-3 text-sm text-slate-200">
+              <ToggleRow
+                label="Command Enabled"
+                hint="Allow users to execute this command in Discord"
+                checked={config.enabled}
+                onChange={() => handleToggle(config.id, 'enabled')}
+              />
+              <ToggleRow
+                label="Save Execution Logs"
+                hint="Persist audit trail history in database"
+                checked={config.saveLogs}
+                onChange={() => handleToggle(config.id, 'saveLogs')}
+              />
+              <ToggleRow
+                label="Reply in Discord"
+                hint="Send Rich Embed reply back to Discord channel"
+                checked={config.replyInDiscord}
+                onChange={() => handleToggle(config.id, 'replyInDiscord')}
+              />
+              <ToggleRow
+                label="Mirror Notification"
+                hint="Post summary alert to 2nd Discord channel"
+                checked={config.mirrorNotification}
+                onChange={() => handleToggle(config.id, 'mirrorNotification')}
+              />
               {config.commandName === 'report' && (
-                <div className="flex items-center justify-between p-3 bg-slate-950 border border-slate-800 rounded-xl">
-                  <div>
-                    <span className="font-semibold block text-purple-300">AI Processing (Gemini/Groq)</span>
-                    <span className="text-xs text-purple-400/70">Analyze summary, category, and priority</span>
-                  </div>
-                  <input
-                    type="checkbox"
-                    checked={config.aiProcessing}
-                    onChange={() => handleToggle(config.id, 'aiProcessing')}
-                    className="w-5 h-5 accent-purple-600 rounded cursor-pointer"
-                  />
-                </div>
+                <ToggleRow
+                  accent
+                  label="AI Processing (Gemini/Groq)"
+                  hint="Analyze summary, category, and priority"
+                  checked={config.aiProcessing}
+                  onChange={() => handleToggle(config.id, 'aiProcessing')}
+                />
               )}
             </div>
           </div>

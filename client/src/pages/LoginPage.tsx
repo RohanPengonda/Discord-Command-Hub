@@ -30,13 +30,13 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-indigo-600 rounded-xl text-white mb-3 shadow-lg shadow-indigo-500/20">
+          <div className="p-3 bg-brand-500 rounded-xl text-white mb-3 shadow-lg shadow-brand-600/25">
             <ShieldAlert className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-white">Admin Sign In</h2>
-          <p className="text-sm text-slate-400 mt-1">Discord Slash-Command Automation Dashboard</p>
+          <p className="text-sm text-slate-400 mt-1 text-center">Discord Slash-Command Automation Dashboard</p>
         </div>
 
         {error && (
@@ -57,7 +57,7 @@ export const LoginPage: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-colors"
                 placeholder="admin@example.com"
               />
             </div>
@@ -74,14 +74,14 @@ export const LoginPage: React.FC = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-11 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-11 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition-colors"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
-                className="absolute right-3 top-2.5 text-slate-500 hover:text-indigo-400 transition-colors"
+                className="absolute right-3 top-2.5 text-slate-500 hover:text-brand-400 transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -91,7 +91,7 @@ export const LoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 rounded-lg shadow-lg shadow-indigo-600/20 transition-all disabled:opacity-50"
+            className="w-full bg-brand-500 hover:bg-brand-400 text-white font-semibold py-2.5 rounded-lg shadow-lg shadow-brand-600/25 transition-all disabled:opacity-50"
           >
             {loading ? 'Authenticating...' : 'Sign In to Dashboard'}
           </button>

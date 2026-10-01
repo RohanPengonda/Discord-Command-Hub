@@ -4,6 +4,20 @@ export default {
   theme: {
     extend: {
       colors: {
+        brand: {
+          50: '#FFF7F0',
+          100: '#FFEADD',
+          200: '#FFD2B0',
+          300: '#FFB37D',
+          400: '#FB8F42',
+          500: '#E8751A',
+          600: '#C55E12',
+          700: '#9E490E',
+          800: '#7C3A0E',
+          900: '#63300F',
+          950: '#351706',
+          DEFAULT: '#E8751A',
+        },
         discord: {
           blurple: '#5865F2',
           green: '#57F287',
@@ -14,6 +28,9 @@ export default {
           darker: '#2B2D31',
           darkest: '#1E1F22',
         },
+      },
+      screens: {
+        xs: '420px',
       },
     },
   },

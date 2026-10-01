@@ -5,7 +5,7 @@ interface StatusBadgeProps {
 }
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
-  let badgeStyle = 'bg-gray-800 text-gray-300 border-gray-700';
+  let badgeStyle = 'bg-slate-800 text-slate-300 border-slate-700';
 
   switch (status.toUpperCase()) {
     case 'SUCCESS':
@@ -24,21 +24,21 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
   }
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeStyle}`}>
+    <span className={`inline-flex items-center whitespace-nowrap px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeStyle}`}>
       {status}
     </span>
   );
 };
 
 export const PriorityBadge: React.FC<{ priority: string }> = ({ priority }) => {
-  let badgeStyle = 'bg-gray-800 text-gray-300 border-gray-700';
+  let badgeStyle = 'bg-slate-800 text-slate-300 border-slate-700';
 
   switch (priority.toUpperCase()) {
     case 'CRITICAL':
       badgeStyle = 'bg-red-950 text-red-400 border-red-800 font-bold';
       break;
     case 'HIGH':
-      badgeStyle = 'bg-purple-950 text-purple-400 border-purple-800';
+      badgeStyle = 'bg-brand-950 text-brand-400 border-brand-800';
       break;
     case 'MEDIUM':
       badgeStyle = 'bg-yellow-950 text-yellow-400 border-yellow-800';
@@ -49,7 +49,9 @@ export const PriorityBadge: React.FC<{ priority: string }> = ({ priority }) => {
   }
 
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${badgeStyle}`}>
+    <span
+      className={`inline-flex items-center whitespace-nowrap px-2 py-0.5 rounded text-xs font-semibold border ${badgeStyle}`}
+    >
       {priority}
     </span>
   );

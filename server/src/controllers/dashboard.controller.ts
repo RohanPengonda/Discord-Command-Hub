@@ -13,8 +13,9 @@ export class DashboardController {
     const limit = parseInt(req.query.limit as string, 10) || 20;
     const status = req.query.status as CommandStatus | undefined;
     const command = req.query.command as string | undefined;
+    const aiOnly = req.query.aiOnly === 'true';
 
-    const result = await LogRepository.getLogs(page, limit, status, command);
+    const result = await LogRepository.getLogs(page, limit, status, command, aiOnly);
     return res.json(result);
   }
 }

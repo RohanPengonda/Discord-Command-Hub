@@ -165,11 +165,18 @@ export class LogRepository {
     }
   }
 
-  static async getLogs(page = 1, limit = 20, filterStatus?: CommandStatus, filterCommand?: string) {
+  static async getLogs(
+    page = 1,
+    limit = 20,
+    filterStatus?: CommandStatus,
+    filterCommand?: string,
+    aiOnly = false
+  ) {
     if (!getDbAvailable()) {
       let memoryList = Array.from(inMemoryLogs.values());
       if (filterStatus) memoryList = memoryList.filter((l) => l.status === filterStatus);
       if (filterCommand) memoryList = memoryList.filter((l) => l.commandName === filterCommand);
+      if (aiOnly) memoryList = memoryList.filter((l) => l.aiResult);
 
       const total = memoryList.length;
       const paginated = memoryList.slice((page - 1) * limit, page * limit);
@@ -182,6 +189,7 @@ export class LogRepository {
 
       if (filterStatus) where.status = filterStatus;
       if (filterCommand) where.commandName = filterCommand;
+      if (aiOnly) where.aiResult = { isNot: null };
 
       const [logs, total] = await Promise.all([
         prisma.commandLog.findMany({
@@ -205,6 +213,7 @@ export class LogRepository {
       let memoryList = Array.from(inMemoryLogs.values());
       if (filterStatus) memoryList = memoryList.filter((l) => l.status === filterStatus);
       if (filterCommand) memoryList = memoryList.filter((l) => l.commandName === filterCommand);
+      if (aiOnly) memoryList = memoryList.filter((l) => l.aiResult);
 
       const total = memoryList.length;
       const paginated = memoryList.slice((page - 1) * limit, page * limit);
