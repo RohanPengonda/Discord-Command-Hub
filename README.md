@@ -1,3 +1,5 @@
+Frontend:- https://discord-command-hub-ten.vercel.app
+
 # Discord Slash-Command Automation Dashboard
 
 A real-world Discord slash command automation platform featuring secure Ed25519 webhook verification, deferred interaction processing, AI issue classification (Google Gemini), second-channel notification mirroring, and an authenticated admin dashboard.
