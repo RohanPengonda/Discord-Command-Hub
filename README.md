@@ -1,4 +1,5 @@
 Frontend:- https://discord-command-hub-ten.vercel.app
+Backend:- https://discord-command-hub.onrender.com
 
 # Discord Slash-Command Automation Dashboard
 
